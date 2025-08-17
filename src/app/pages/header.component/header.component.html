@@ -1,0 +1,57 @@
+<!--<header class="topbar">-->
+<!--  &lt;!&ndash; Logo &ndash;&gt;-->
+<!--  <div class="logo">-->
+<!--    <img src="assets/pahana-edu-logo.jpg" alt="Pahanaedu Logo" class="logo-img" />-->
+<!--    <span *ngIf="user">Welcome, {{ user.customerName }}</span>-->
+<!--  </div>-->
+
+<!--  &lt;!&ndash; Navigation &ndash;&gt;-->
+<!--  <nav>-->
+<!--    <a routerLink="/home">Home</a>-->
+<!--    <a routerLink="/about">About</a>-->
+<!--  </nav>-->
+
+<!--  &lt;!&ndash; Google Sign-In / User Info &ndash;&gt;-->
+<!--  <div class="auth-buttons">-->
+<!--    <div *ngIf="!user" id="googleBtn"></div>-->
+
+<!--    <div *ngIf="user" class="user-info">-->
+<!--      <img src="{{user.picture}}" alt="User Icon" class="user-logo" />-->
+<!--      <span>{{ user.customerName }}</span>-->
+<!--      <span><h1>    </h1></span>-->
+<!--      <span>{{ user.email }}</span>-->
+<!--      <button (click)="logout()">Logout</button>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</header>-->
+
+<header class="topbar">
+  <!-- Logo -->
+  <div class="logo">
+    <img src="assets/pahana-edu-logo.jpg" alt="Pahanaedu Logo" class="logo-img" />
+    <span *ngIf="user">Welcome, {{ user.customerName }}</span>
+  </div>
+
+  <!-- Navigation -->
+  <nav>
+    <a routerLink="/home">Home</a>
+    <a routerLink="/about">About</a>
+  </nav>
+
+  <!-- Google Sign-In / User Info -->
+  <div class="auth-buttons">
+    <!-- Show Google Sign In Button only if no user -->
+    <div *ngIf="!user" id="googleBtn"></div>
+
+    <!-- Show User Info if logged in -->
+    <div *ngIf="user" class="user-info">
+      <img [src]="user.picture" alt="User Icon" class="user-logo" />
+<!--      <span>{{ user.customerName }}</span>-->
+      <span>{{ user.email }}</span>
+<!--      <button (click)="logout()">Logout</button>-->
+      <button class="logout-button" mat-icon-button aria-label="Logout" (click)="logout()">
+        <mat-icon>logout</mat-icon>
+      </button>
+    </div>
+  </div>
+</header>
