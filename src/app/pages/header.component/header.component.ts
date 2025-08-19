@@ -147,6 +147,7 @@ export class HeaderComponent implements AfterViewInit, OnInit {
             localStorage.setItem('email', res.customerDto.email);
             localStorage.setItem('name', res.customerDto.customerName);
             localStorage.setItem('profile', res.customerDto.picture);
+            localStorage.setItem('customerId', String(res.customerDto.customerId));
           }
 
           window.location.reload();
@@ -172,6 +173,7 @@ export class HeaderComponent implements AfterViewInit, OnInit {
       localStorage.removeItem('email');
       localStorage.removeItem('name');
       localStorage.removeItem('profile');
+      localStorage.removeItem('customerId');
     }
 
     window.location.reload();

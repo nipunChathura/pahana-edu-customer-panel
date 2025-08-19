@@ -1,3 +1,122 @@
+<div class="top-bar">
+  <!-- Left: App Title -->
+  <span class="app-title">My Shop</span>
+
+  <!-- Center: Search -->
+  <span class="search-container">
+    <mat-form-field appearance="outline" class="search-bar">
+      <mat-label style="color: white">Search</mat-label>
+      <input matInput style="color: white" placeholder="Search products">
+      <button mat-icon-button matSuffix>
+        <mat-icon>search</mat-icon>
+      </button>
+    </mat-form-field>
+  </span>
+
+  <!-- Right: Icons -->
+  <span class="icons">
+    <!-- Favorites -->
+    <button mat-icon-button [matBadge]="favoriteCount" matBadgeColor="primary" matBadgeOverlap="false">
+      <mat-icon>favorite</mat-icon>
+    </button>
+
+    <!-- Cart -->
+    <button mat-icon-button
+            [matBadge]="cartCount"
+            matBadgeColor="primary"
+            matBadgeOverlap="false"
+            [matMenuTriggerFor]="cartMenu">
+      <mat-icon>shopping_cart</mat-icon>
+    </button>
+
+    <!-- Mini-Cart Dropdown -->
+<!--    <mat-menu #cartMenu="matMenu" class="cart-menu">-->
+<!--      <ng-container *ngIf="cartItems.length > 0; else emptyCart">-->
+<!--        <div *ngFor="let item of cartItems; let i = index" class="cart-item">-->
+<!--          <img [src]="item.book.imageUrl" alt="{{ item.book.name }}" class="cart-img" />-->
+<!--          <div class="cart-info">-->
+<!--            <div class="cart-name">{{ item.book.name }}</div>-->
+<!--            <div class="cart-qty">{{ item.quantity }} × {{ item.book.price | currency:'LKR' }}</div>-->
+<!--          </div>-->
+<!--          <div class="cart-subtotal">-->
+<!--            {{ item.quantity * (item.book.price ?? 0) | currency:'LKR' }}-->
+<!--          </div>-->
+<!--          <button mat-icon-button id="deleteButton" (click)="removeItem(i, $event)"-->
+<!--                  matTooltip="Remove">-->
+<!--            <mat-icon>delete</mat-icon>-->
+<!--          </button>-->
+<!--        </div>-->
+
+<!--        <mat-divider></mat-divider>-->
+
+<!--        &lt;!&ndash; Total &ndash;&gt;-->
+<!--        <div class="cart-total">-->
+<!--          <strong>Total:</strong>-->
+<!--          <span>{{ getTotal() | currency:'LKR ' }}</span>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Checkout &ndash;&gt;-->
+<!--        <button mat-raised-button color="primary" (click)="goToCheckout()" class="checkout-btn">-->
+<!--          Checkout-->
+<!--        </button>-->
+<!--      </ng-container>-->
+
+<!--      &lt;!&ndash; If empty &ndash;&gt;-->
+<!--      <ng-template #emptyCart>-->
+<!--        <div class="empty-cart">🛒 Your cart is empty</div>-->
+<!--      </ng-template>-->
+<!--    </mat-menu>-->
+    <mat-menu #cartMenu="matMenu" class="cart-menu">
+      <ng-container *ngIf="cartItems.length > 0; else emptyCart">
+        <div *ngFor="let item of cartItems; let i = index" class="cart-item" matRipple>
+          <!-- Book Image -->
+          <img [src]="item.book.imageUrl" alt="{{ item.book.name }}" class="cart-img" />
+
+          <!-- Info -->
+          <div class="cart-info">
+            <div class="cart-name">{{ item.book.name }}</div>
+            <div class="cart-qty">
+              <span class="qty-badge">{{ item.quantity }}</span> ×
+              <span>{{ item.book.price | currency:'LKR' }}</span>
+            </div>
+          </div>
+
+          <!-- Subtotal -->
+          <div class="cart-subtotal">
+            {{ item.quantity * (item.book.price ?? 0) | currency:'LKR' }}
+          </div>
+
+          <!-- Remove Button -->
+          <button mat-icon-button class="delete-btn" (click)="removeItem(i, $event)" matTooltip="Remove">
+            <mat-icon id="deleteButton">delete</mat-icon>
+          </button>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <!-- Total -->
+        <div class="cart-total">
+          <span>Total : </span>
+          <span class="total-amount">{{ getTotal() | currency:'LKR ' }}</span>
+        </div>
+
+        <!-- Checkout -->
+        <button mat-raised-button color="primary" (click)="goToCheckout()" class="checkout-btn">
+          Checkout
+        </button>
+      </ng-container>
+
+          <!-- Empty Cart -->
+      <ng-template #emptyCart>
+        <div class="empty-cart">
+          <mat-icon>shopping_cart</mat-icon> Your cart is empty
+        </div>
+      </ng-template>
+    </mat-menu>
+
+  </span>
+</div>
+
 <div class="main-container">
   <router-outlet></router-outlet>
 </div>

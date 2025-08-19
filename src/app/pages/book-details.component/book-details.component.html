@@ -1,0 +1,107 @@
+<!--<div class="popup-overlay" (click)="closePopup()">-->
+<!--  <div class="popup-content" (click)="$event.stopPropagation()">-->
+<!--    <button class="close-btn" (click)="closePopup()">&times;</button>-->
+
+<!--&lt;!&ndash;    <div class="book-details-container">&ndash;&gt;-->
+<!--    <ng-container *ngIf="book; else emptyBook" class="book-details-container">-->
+<!--      <img [src]="book.imageUrl" alt="{{book.name}}" class="book-image">-->
+
+<!--      <div class="book-info">-->
+<!--        <h2>{{book.name}}</h2>-->
+<!--        <p class="description">{{book.description}}</p>-->
+<!--        <p><strong>Author:</strong> {{book.author}}</p>-->
+<!--        <p><strong>Publisher:</strong> {{book.publisher}}</p>-->
+<!--        <p><strong>Publish Date:</strong> {{book.publishDate}}</p>-->
+<!--        <p><strong>ISBN:</strong> {{book.isbn}}</p>-->
+
+<!--        <div class="price-info">-->
+<!--          <p><strong>Price:</strong> LKR {{book.price ?? 0}}</p>-->
+<!--          <p *ngIf="book.isPromotionEnable"><strong>Promotion Price:</strong> LKR {{promotionPrice}}</p>-->
+<!--          <p *ngIf="book.isPromotionEnable"><strong>Savings:</strong> LKR {{savingPrice}}</p>-->
+<!--          <p><strong>Total Price:</strong> LKR {{totalPrice}}</p>-->
+<!--        </div>-->
+
+<!--        <div class="quantity">-->
+<!--          <button (click)="decreaseQuantity()">-</button>-->
+<!--          <span>{{orderQuantity}}</span>-->
+<!--          <button (click)="increaseQuantity()">+</button>-->
+<!--        </div>-->
+
+<!--        <div class="awards" *ngIf="book.awardList?.length">-->
+<!--          <h3>Awards:</h3>-->
+<!--          <ul>-->
+<!--            <li *ngFor="let award of book.awardList">-->
+<!--              <strong>{{award.awardName}}:</strong> {{award.awardDescription}}-->
+<!--            </li>-->
+<!--          </ul>-->
+<!--        </div>-->
+
+<!--        <button class="add-to-cart-btn" (click)="addToCart()">Add to Cart</button>-->
+<!--      </div>-->
+<!--    </ng-container>-->
+<!--&lt;!&ndash;    </div>&ndash;&gt;-->
+
+<!--    <ng-template #emptyBook>-->
+<!--      <div class="empty-message">-->
+<!--        <p>Book list is empty.</p>-->
+<!--      </div>-->
+<!--    </ng-template>-->
+
+<!--  </div>-->
+<!--</div>-->
+
+
+<div class="popup-overlay" (click)="closePopup()">
+  <div class="popup-content" (click)="$event.stopPropagation()">
+    <button class="close-btn" (click)="closePopup()">&times;</button>
+
+    <ng-container *ngIf="book; else emptyBook" class="book-details-container">
+      <div class="book-details-flex">
+        <!-- Book Image Left -->
+        <div class="book-image-container">
+          <img [src]="book.imageUrl" alt="{{book.name}}" class="book-image">
+        </div>
+
+        <!-- Book Info Right -->
+        <div class="book-info">
+          <h2>{{book.name}}</h2>
+          <p class="description">{{book.description}}</p>
+          <p><strong>Author:</strong> {{book.author}}</p>
+          <p><strong>Publisher:</strong> {{book.publisher}}</p>
+          <p><strong>Publish Date:</strong> {{book.publishDate}}</p>
+          <p><strong>ISBN:</strong> {{book.isbn}}</p>
+
+          <div class="price-info">
+            <p><strong>Price:</strong> LKR {{book.price ?? 0}}</p>
+            <p *ngIf="book.isPromotionEnable"><strong>Promotion Price:</strong> LKR {{promotionPrice}}</p>
+            <p *ngIf="book.isPromotionEnable"><strong>Savings:</strong> LKR {{savingPrice}}</p>
+            <p><strong>Total Price:</strong> LKR {{totalPrice}}</p>
+          </div>
+
+          <div class="quantity">
+            <button (click)="decreaseQuantity()">-</button>
+            <span>{{orderQuantity}}</span>
+            <button (click)="increaseQuantity()">+</button>
+          </div>
+
+          <div class="awards" *ngIf="book.awardList?.length">
+            <h3>Awards:</h3>
+            <ul>
+              <li *ngFor="let award of book.awardList">
+                <strong>{{award.awardName}}:</strong> {{award.awardDescription}}
+              </li>
+            </ul>
+          </div>
+
+          <button class="add-to-cart-btn" (click)="addToCart()">Add to Cart</button>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-template #emptyBook>
+      <div class="empty-message">
+        <p>Book list is empty.</p>
+      </div>
+    </ng-template>
+  </div>
+</div>

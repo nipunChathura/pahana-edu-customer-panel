@@ -1,4 +1,26 @@
-<div class="home-container">
-  <h2>Welcome to Pahanaedu</h2>
-  <p>This is your full home page content.</p>
-</div>
+<!-- Banner Images -->
+<app-horizontal-scroll [step]="screenWidth" [showArrows]="true" [smooth]="true">
+  <div class="banner-wrapper" *ngFor="let image of imageList">
+    <img [src]="image.image" alt="{{ image.id }}" class="banner-image" />
+    <div class="overlay"><h2>{{ image.id }}</h2></div>
+  </div>
+</app-horizontal-scroll>
+
+<!-- Categories -->
+<div class="category-title"><h1>Categories</h1></div>
+<app-horizontal-scroll *ngIf="categories.length > 0" [step]="260" [showArrows]="true" [smooth]="true">
+  <mat-card *ngFor="let category of categories" class="category-card" (click)="navigateBookList(category, 'category')">
+    <img mat-card-image [src]="category.categoryIconUrl" alt="{{ category.categoryName }}" />
+    <mat-card-content>{{ category.categoryName }}</mat-card-content>
+  </mat-card>
+</app-horizontal-scroll>
+
+<!-- Promotions -->
+<div class="category-title"><h1>Promotions</h1></div>
+<app-horizontal-scroll *ngIf="promotions.length > 0" [step]="260" [showArrows]="true" [smooth]="true">
+  <mat-card *ngFor="let promo of promotions" class="promotion-card" (click)="navigateBookList(promo, 'promotion')">
+    <img mat-card-image  [src]="promo.promotionUrl" alt="{{ promo.promotionName }}" />
+    <mat-card-content>{{ promo.promotionName }}</mat-card-content>
+  </mat-card>
+</app-horizontal-scroll>
+<h1></h1>

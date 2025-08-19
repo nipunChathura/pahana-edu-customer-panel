@@ -1,0 +1,35 @@
+<div class="book-list-container">
+  <div class="title-bar">
+    <h2>Books List
+      <span *ngIf="id">/ {{ id }}</span>
+      <span *ngIf="type">/ {{ type }}</span>
+    </h2>
+  </div>
+
+  <!-- Check if books array has any items -->
+  <ng-container *ngIf="books.length > 0; else emptyBooks">
+    <div class="book-grid">
+      <div class="book-card" *ngFor="let book of books" (click)="openBookDetails(book)">
+        <img [src]="book.imageUrl" alt="{{book.name}}" class="book-image">
+        <h3>{{book.name}}</h3>
+        <p>Price: LKR {{book.price ?? 0}}</p>
+        <div class="quantity">
+          <span>{{book.quantity ?? 0}}</span>
+        </div>
+        <p *ngIf="book.isPromotionEnable" class="promotion">Promotion Available!</p>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- Template for empty books -->
+  <ng-template #emptyBooks>
+    <p class="empty-message">No books available.</p>
+  </ng-template>
+</div>
+
+<!-- Book details popup -->
+<app-book-details
+  *ngIf="selectedBook"
+  [book]="selectedBook"
+  (close)="onPopupClose()">>
+</app-book-details>

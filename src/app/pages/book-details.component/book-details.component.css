@@ -1,0 +1,83 @@
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popup-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 900px;
+  width: 90%;
+  position: relative;
+  overflow-y: auto;
+  max-height: 90vh;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 25px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.book-details-flex {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.book-image-container {
+  flex: 1 1 250px;
+  text-align: center;
+}
+
+.book-image {
+  max-width: 100%;
+  border-radius: 5px;
+}
+
+.book-info {
+  flex: 2 1 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.price-info p,
+.quantity,
+.awards {
+  margin-bottom: 10px;
+}
+
+.quantity button {
+  width: 30px;
+  height: 30px;
+  margin: 0 5px;
+}
+
+.add-to-cart-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.add-to-cart-btn:hover {
+  background-color: #0056b3;
+}
