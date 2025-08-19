@@ -10,6 +10,8 @@ import {MatDivider} from '@angular/material/divider';
 import {MatTooltip} from '@angular/material/tooltip';
 import {CartService} from '../../services/CartService';
 import {BookDto} from '../../services/dto/BookDto';
+import {MatRipple} from '@angular/material/core';
+import {FormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-main',
@@ -17,7 +19,7 @@ import {BookDto} from '../../services/dto/BookDto';
   imports: [
     RouterOutlet, MatFormField, MatIcon, MatIconButton, MatInput, MatLabel, MatSuffix,
     MatBadge, MatMenu, NgIf, MatDivider, CurrencyPipe, MatButton, NgForOf,
-    MatMenuTrigger, MatTooltip
+    MatMenuTrigger, MatTooltip, MatRipple, FormsModule
   ],
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.css']
@@ -30,6 +32,8 @@ export class MainComponent implements OnInit {
   cartItems: { book: BookDto; quantity: number }[] = [];
   cartCount = 0;
 
+  searchTerm: string = '';
+
   constructor(private cartService: CartService, private router: Router) {}
 
   ngOnInit() {
@@ -38,6 +42,17 @@ export class MainComponent implements OnInit {
       this.cartCount = count;
       this.cartItems = this.cartService.getCartItems();
     });
+  }
+
+  searchBook(type: string): void {
+    if (!this.searchTerm.trim()) return;
+
+    // Here, we navigate to the same page structure as your category/promotion
+    this.router.navigate(['/book', type, this.searchTerm])
+      .then(success => {
+        if (!success) console.error('Navigation failed');
+      })
+      .catch(err => console.error('Navigation error:', err));
   }
 
   getTotal(): number {

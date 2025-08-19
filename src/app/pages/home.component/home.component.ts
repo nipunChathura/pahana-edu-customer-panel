@@ -58,10 +58,13 @@ export class HomeComponent implements OnInit {
 
   loadImages() {
     this.imageList = [
-      { id: 1, image: '/assets/scroll/scroll_1.jpg' },
-      { id: 2, image: '/assets/scroll/scroll_2.jpg' },
-      { id: 3, image: '/assets/scroll/scroll_3.jpg' },
-      { id: 4, image: '/assets/scroll/scroll_4.jpg' }
+      { id: 1, image: '/assets/scroll/scroll_4.jpg' },
+      { id: 2, image: '/assets/scroll/scroll_1.jpg' },
+      { id: 3, image: '/assets/scroll/scroll_2.jpg' },
+      { id: 4, image: '/assets/scroll/scroll_3.jpg' },
+      { id: 5, image: '/assets/scroll/scroll_5.jpg' },
+      { id: 6, image: '/assets/scroll/scroll_6.jpg' },
+      { id: 7, image: '/assets/scroll/scroll_7.jpg' }
     ];
   }
 
