@@ -1,34 +1,95 @@
 <div class="checkout-container">
+
   <h2>Checkout</h2>
 
+  <!-- Customer + Payment Details Row -->
+  <div class="details-row">
+    <!-- Customer Details -->
+    <div class="customer-details" [formGroup]="customerForm">
+      <h3>Customer Details</h3>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Name</mat-label>
+        <input matInput placeholder="Enter your name" formControlName="name" />
+        <mat-error *ngIf="customerForm.get('name')?.hasError('required')">Name is required</mat-error>
+        <mat-error *ngIf="customerForm.get('name')?.hasError('minlength')">Name must be at least 2 characters</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" placeholder="Enter your email" formControlName="email" />
+        <mat-error *ngIf="customerForm.get('email')?.hasError('required')">Email is required</mat-error>
+        <mat-error *ngIf="customerForm.get('email')?.hasError('email')">Invalid email format</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Phone Number</mat-label>
+        <input matInput placeholder="07XXXXXXXX" formControlName="phone" />
+        <mat-error *ngIf="customerForm.get('phone')?.hasError('required')">Phone number is required</mat-error>
+        <mat-error *ngIf="customerForm.get('phone')?.hasError('pattern')">Invalid Sri Lankan mobile number</mat-error>
+      </mat-form-field>
+    </div>
+
+    <!-- Payment Details -->
+    <div class="payment-details" [formGroup]="paymentForm">
+      <h3>Payment Details</h3>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Cardholder Name</mat-label>
+        <input matInput placeholder="Name on Card" formControlName="cardHolder" />
+        <mat-error *ngIf="paymentForm.get('cardHolder')?.hasError('required')">Cardholder name is required</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Card Number</mat-label>
+        <input matInput placeholder="1234567812345678" maxlength="16" formControlName="cardNumber" />
+        <mat-error *ngIf="paymentForm.get('cardNumber')?.hasError('required')">Card number is required</mat-error>
+        <mat-error *ngIf="paymentForm.get('cardNumber')?.hasError('pattern')">Invalid card number</mat-error>
+      </mat-form-field>
+
+      <div class="row">
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Expiry (MM/YY)</mat-label>
+          <input matInput placeholder="MM/YY" formControlName="expiry" />
+          <mat-error *ngIf="paymentForm.get('expiry')?.hasError('required')">Expiry date is required</mat-error>
+          <mat-error *ngIf="paymentForm.get('expiry')?.hasError('pattern')">Invalid expiry date</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>CVV</mat-label>
+          <input matInput type="password" maxlength="4" placeholder="CVV" formControlName="cvv" />
+          <mat-error *ngIf="paymentForm.get('cvv')?.hasError('required')">CVV is required</mat-error>
+          <mat-error *ngIf="paymentForm.get('cvv')?.hasError('pattern')">Invalid CVV</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cart Items -->
   <ng-container *ngIf="cartItems.length > 0; else emptyCart">
+    <h3>Your Cart</h3>
     <div *ngFor="let item of cartItems; let i = index" class="checkout-item">
       <img [src]="item.book.imageUrl" alt="{{ item.book.name }}" class="checkout-img" />
       <div class="checkout-info">
         <div class="book-name">{{ item.book.name }}</div>
-        <div class="book-qty">Quantity: {{ item.quantity }}</div>
+        <div class="book-qty">Qty: {{ item.quantity }}</div>
         <div class="book-price">Price: {{ item.book.price | currency:'LKR ' }}</div>
         <div class="book-subtotal">Subtotal: {{ item.quantity * (item.book.price ?? 0) | currency:'LKR ' }}</div>
       </div>
-      <button mat-icon-button (click)="removeItem(i)">
-        <mat-icon>delete</mat-icon>
-      </button>
+      <button mat-icon-button style="background: coral;" color="warn" (click)="removeItem(i)"><mat-icon>delete</mat-icon></button>
     </div>
 
     <mat-divider></mat-divider>
 
-    <div class="checkout-total">
-      <strong>Total:</strong> {{ totalPrice | currency:'LKR' }}
-    </div>
+    <div class="checkout-total"><strong>Total:</strong> {{ totalPrice | currency:'LKR' }}</div>
 
-    <button mat-raised-button (click)="placeOrder()" color="primary" class="final-checkout-btn">
+    <button mat-raised-button color="primary" (click)="placeOrder()" [disabled]="!canPlaceOrder" class="final-checkout-btn">
       Place Order
     </button>
   </ng-container>
 
   <ng-template #emptyCart>
-    <div class="empty-cart">
-      🛒 Your cart is empty.
-    </div>
+    <div class="empty-cart">🛒 Your cart is empty.</div>
   </ng-template>
+
 </div>

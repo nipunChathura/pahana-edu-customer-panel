@@ -6,6 +6,8 @@ import { DataService } from '../../services/DataService';
 import { BookDto } from '../../services/dto/BookDto';
 import { CustomerOpenApiRequest } from '../../services/request/CustomerOpenApiRequest';
 import {CartService} from '../../services/CartService';
+import {OrderDto} from '../../services/dto/OrderDto';
+import {CustomerDto} from '../../services/dto/CustomerDto';
 
 @Component({
   selector: 'app-book-list',
@@ -31,7 +33,9 @@ export class BookListComponent implements OnInit {
 
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id');
+    console.log(this.id)
     this.type = this.route.snapshot.paramMap.get('type');
+    console.log(this.type)
     this.getBooks();
     console.log("list page");
     console.log(this.cardService.getTotalCount())
@@ -46,7 +50,9 @@ export class BookListComponent implements OnInit {
       customerId: null,
       bookId: null,
       requestType: this.type,
-      requestId: this.id
+      requestId: this.id,
+      orderDto: null,
+      customerDto: null
     };
 
     this.dataService.getBooks(request).subscribe({

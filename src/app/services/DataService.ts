@@ -5,6 +5,7 @@ import {Observable, shareReplay} from 'rxjs';
 import {PromotionResponse} from './response/PromotionResponse';
 import {CustomerOpenApiRequest} from './request/CustomerOpenApiRequest';
 import {BookResponse} from './response/BookResponse';
+import {PlaceOrderRequest} from './request/PlaceOrderRequest';
 
 @Injectable({
   providedIn: 'root'
@@ -52,6 +53,14 @@ export class DataService {
     const headers = this.createHeaders();
     return this.http.post<BookResponse>(
       `${this.baseUrl}/books`,
+      request, { headers }
+    );
+  }
+
+  placeOrder(request: PlaceOrderRequest): Observable<BookResponse> {
+    const headers = this.createHeaders();
+    return this.http.post<BookResponse>(
+      `${this.baseUrl}/place/order`,
       request, { headers }
     );
   }

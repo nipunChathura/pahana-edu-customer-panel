@@ -6,6 +6,10 @@
   padding: 8px 16px;
 }
 
+.mat-mdc-form-field-subscript-wrapper .mat-mdc-form-field-bottom-align {
+  height: 0 !important;
+}
+
 .app-title {
   font-size: 20px;
   font-weight: bold;

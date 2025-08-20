@@ -14,7 +14,7 @@
         <h3>{{book.name}}</h3>
         <p>Price: LKR {{book.price ?? 0}}</p>
         <div class="quantity">
-          <span>{{book.quantity ?? 0}}</span>
+          <span>Quantity: {{book.quantity ?? 0}}</span>
         </div>
         <p *ngIf="book.isPromotionEnable" class="promotion">Promotion Available!</p>
       </div>

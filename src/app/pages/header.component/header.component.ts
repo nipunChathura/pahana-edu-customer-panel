@@ -101,7 +101,6 @@ export class HeaderComponent implements AfterViewInit, OnInit {
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit() {
-    // ✅ Only access localStorage in browser
     if (typeof window !== 'undefined') {
       const email = localStorage.getItem('email');
       if (email) {
@@ -112,6 +111,7 @@ export class HeaderComponent implements AfterViewInit, OnInit {
         } as CustomerDto;
       }
     }
+    console.log(this.user?.picture)
   }
 
   ngAfterViewInit() {
@@ -132,7 +132,12 @@ export class HeaderComponent implements AfterViewInit, OnInit {
 
   handleCredentialResponse(response: any) {
     const credential = response.credential;
+    window.onload = function() {
+      const mobile = prompt("Enter your mobile number:");
+      console.log("You entered:", mobile);
+    };
     const mobile = prompt("Enter your mobile number:");
+    console.log("You entered:", mobile);
     if (!mobile) {
       alert("Mobile number is required!");
       return;
@@ -140,6 +145,7 @@ export class HeaderComponent implements AfterViewInit, OnInit {
 
     this.authService.sendGoogleCredential(credential, mobile).subscribe({
       next: (res) => {
+        console.log(res);
         if (res.status === 'success') {
           this.user = res.customerDto;
 
