@@ -1,0 +1,119 @@
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3, h4 {
+  margin: 0 0 10px 0;
+}
+
+p {
+  margin-bottom: 15px;
+}
+
+/* Hero */
+.about-hero {
+  background: #1565c0; /* deep blue */
+  color: #fff;
+  text-align: center;
+  padding: 80px 20px;
+}
+.about-hero h1 {
+  font-size: 2.5rem;
+}
+.about-hero p {
+  font-size: 1.2rem;
+  margin-top: 15px;
+}
+
+/* Story Section */
+.about-story {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 0 20px;
+  text-align: center;
+}
+
+/* Mission & Vision */
+.about-mission-vision {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin: 40px 0;
+}
+.about-mission-vision .card {
+  background: #e3f2fd; /* light blue */
+  padding: 20px;
+  border-radius: 10px;
+  flex: 1 1 300px;
+  text-align: center;
+}
+
+/* Values */
+.about-values {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+.about-values ul {
+  list-style: none;
+  padding: 0;
+}
+.about-values li {
+  margin-bottom: 10px;
+  background: #bbdefb; /* medium light blue */
+  padding: 10px;
+  border-radius: 5px;
+}
+
+/* Team */
+.about-team {
+  max-width: 1000px;
+  margin: 40px auto;
+  text-align: center;
+}
+.team-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+}
+.team-member {
+  background: #e3f2fd; /* light blue */
+  padding: 15px;
+  border-radius: 10px;
+  width: 200px;
+}
+.team-member img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+
+/* CTA */
+.about-cta {
+  background: #0d47a1; /* darker blue */
+  color: #fff;
+  text-align: center;
+  padding: 50px 20px;
+}
+.about-cta .btn-primary {
+  background: #1976d2; /* bright blue */
+  color: #fff;
+  text-decoration: none;
+  padding: 12px 25px;
+  border-radius: 5px;
+  font-weight: bold;
+  display: inline-block;
+  margin-top: 15px;
+  transition: background 0.3s ease;
+}
+.about-cta .btn-primary:hover {
+  background: #1565c0; /* hover darker */
+}
