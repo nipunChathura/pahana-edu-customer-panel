@@ -137,3 +137,9 @@ button mat-icon {
   padding: 0px;
   margin-right: 10px;
 }
+
+
+.cdk-overlay-pane {
+  max-width: 490px;
+}
+

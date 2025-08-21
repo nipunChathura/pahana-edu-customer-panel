@@ -21,8 +21,8 @@ export class BookDetailsComponent {
   // Get promotion price
   get promotionPrice(): number {
     if (!this.book) return 0;
-    return this.book.isPromotionEnable
-      ? (this.book.promotionPrice ?? 0)
+    return this.book.promotionEnable
+      ? (this.book.promotionBookPrice ?? 0)
       : (this.book.price ?? 0);
   }
 

@@ -12,10 +12,11 @@ export interface BookDto {
   publishDate: string | null;
   isbn: string | null;
   price: number | null;
-  isPromotionEnable: boolean;
+  promotionEnable: boolean;
   promotionId: number | null;
   promotionType: string | null;
   promotionPrice: number | null;
+  minusAMount: number | null;
   promotionBookPrice: number | null;
   quantity: number | null;
   imageUrl: string | null;

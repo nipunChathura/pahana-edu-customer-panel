@@ -1,6 +1,24 @@
+/*.footer {*/
+/*  text-align: center;*/
+/*  padding: 10px 0;*/
+/*  background-color: #004080;*/
+/*  color: white;*/
+/*}*/
+
 .footer {
-  text-align: center;
-  padding: 10px 0;
-  background-color: #004080;
+  background-color: #0d47a1;
   color: white;
+  padding: 20px;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.social-icons a {
+  color: white;
+  margin: 0 10px;
+  font-size: 24px;
+}
+
+.social-icons a:hover {
+  color: #64b5f6;
 }

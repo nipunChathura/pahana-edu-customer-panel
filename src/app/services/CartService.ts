@@ -146,8 +146,8 @@ export class CartService {
 
   getTotalPrice(): number {
     return this.items.reduce((sum, item) => {
-      const price = item.book.isPromotionEnable
-        ? (item.book.promotionPrice ?? item.book.price ?? 0)
+      const price = item.book.promotionEnable
+        ? (item.book.promotionBookPrice ?? item.book.price ?? 0)
         : (item.book.price ?? 0);
       return sum + price * item.quantity;
     }, 0);

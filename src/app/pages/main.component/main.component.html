@@ -36,7 +36,7 @@
           <img [src]="item.book.imageUrl" alt="{{ item.book.name }}" class="cart-img" />
 
           <!-- Info -->
-          <div class="cart-info">
+          <div class="cart-info" >
             <div class="cart-name">{{ item.book.name }}</div>
             <div class="cart-qty">
               <span class="qty-badge">{{ item.quantity }}</span> ×
@@ -46,7 +46,13 @@
 
           <!-- Subtotal -->
           <div class="cart-subtotal">
-            {{ item.quantity * (item.book.price ?? 0) | currency:'LKR ' }}
+            {{
+            item.quantity *
+            (item.book.promotionEnable
+              ? (item.book.promotionBookPrice ?? item.book.price ?? 0)
+              : (item.book.price ?? 0))
+              | currency:'LKR '
+            }}
           </div>
 
           <!-- Remove Button -->

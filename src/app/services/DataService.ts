@@ -6,6 +6,7 @@ import {PromotionResponse} from './response/PromotionResponse';
 import {CustomerOpenApiRequest} from './request/CustomerOpenApiRequest';
 import {BookResponse} from './response/BookResponse';
 import {PlaceOrderRequest} from './request/PlaceOrderRequest';
+import {CustomerOpenApiResponse} from './response/CustomerOpenApiResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -57,11 +58,16 @@ export class DataService {
     );
   }
 
-  placeOrder(request: PlaceOrderRequest): Observable<BookResponse> {
+  placeOrder(request: PlaceOrderRequest): Observable<CustomerOpenApiResponse> {
     const headers = this.createHeaders();
-    return this.http.post<BookResponse>(
+    return this.http.post<CustomerOpenApiResponse>(
       `${this.baseUrl}/place/order`,
       request, { headers }
     );
+  }
+
+  getOrderById(orderId: number): Observable<CustomerOpenApiResponse> {
+    const headers = this.createHeaders();
+    return this.http.get<CustomerOpenApiResponse>(`${this.baseUrl}/order/${orderId}`, { headers });
   }
 }

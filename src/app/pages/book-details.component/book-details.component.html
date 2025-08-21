@@ -73,8 +73,8 @@
 
           <div class="price-info">
             <p><strong>Price:</strong> LKR {{book.price ?? 0}}</p>
-            <p *ngIf="book.isPromotionEnable"><strong>Promotion Price:</strong> LKR {{promotionPrice}}</p>
-            <p *ngIf="book.isPromotionEnable"><strong>Savings:</strong> LKR {{savingPrice}}</p>
+            <p *ngIf="book.promotionEnable"><strong>Promotion Price:</strong> LKR {{promotionPrice}}</p>
+            <p *ngIf="book.promotionEnable"><strong>Savings:</strong> LKR {{savingPrice}}</p>
             <p><strong>Total Price:</strong> LKR {{totalPrice}}</p>
           </div>
 

@@ -12,11 +12,11 @@
       <div class="book-card" *ngFor="let book of books" (click)="openBookDetails(book)">
         <img [src]="book.imageUrl" alt="{{book.name}}" class="book-image">
         <h3>{{book.name}}</h3>
+        <p *ngIf="book.promotionEnable" style="font-size: 20px; color: #b70404" class="promotion">Promotion Available!</p>
         <p>Price: LKR {{book.price ?? 0}}</p>
         <div class="quantity">
           <span>Quantity: {{book.quantity ?? 0}}</span>
         </div>
-        <p *ngIf="book.isPromotionEnable" class="promotion">Promotion Available!</p>
       </div>
     </div>
   </ng-container>

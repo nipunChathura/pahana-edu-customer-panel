@@ -156,3 +156,44 @@ h2 {
   border: 1px solid #ccc; /* border for all boxes */
   box-shadow: 0 2px 6px rgba(0,0,0,0.05);
 }
+
+
+/*////////// bill ////////*/
+
+.bill-frame {
+  border: 2px solid #333;
+  padding: 20px;
+  margin: 20px 0;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.bill-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.shop-logo {
+  width: 80px;
+  height: auto;
+}
+
+.bill-frame h2, .bill-frame h3 {
+  margin: 10px 0;
+}
+
+.bill-frame table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10px 0;
+}
+
+.bill-frame table, .bill-frame th, .bill-frame td {
+  border: 1px solid #999;
+  padding: 8px;
+}
+
+.bill-frame th {
+  background-color: #eee;
+}

@@ -4,8 +4,9 @@
 
   <!-- Customer + Payment Details Row -->
   <div class="details-row">
+
     <!-- Customer Details -->
-    <div class="customer-details" [formGroup]="customerForm">
+    <div class="customer-details" [formGroup]="customerForm" *ngIf="showDetails">
       <h3>Customer Details</h3>
 
       <mat-form-field appearance="outline" class="full-width">
@@ -31,7 +32,7 @@
     </div>
 
     <!-- Payment Details -->
-    <div class="payment-details" [formGroup]="paymentForm">
+    <div class="payment-details" [formGroup]="paymentForm" *ngIf="showDetails">
       <h3>Payment Details</h3>
 
       <mat-form-field appearance="outline" class="full-width">
@@ -66,26 +67,82 @@
   </div>
 
   <!-- Cart Items -->
-  <ng-container *ngIf="cartItems.length > 0; else emptyCart">
+  <ng-container *ngIf="cartItems.length > 0; else emptyCart" >
     <h3>Your Cart</h3>
     <div *ngFor="let item of cartItems; let i = index" class="checkout-item">
       <img [src]="item.book.imageUrl" alt="{{ item.book.name }}" class="checkout-img" />
       <div class="checkout-info">
         <div class="book-name">{{ item.book.name }}</div>
         <div class="book-qty">Qty: {{ item.quantity }}</div>
-        <div class="book-price">Price: {{ item.book.price | currency:'LKR ' }}</div>
-        <div class="book-subtotal">Subtotal: {{ item.quantity * (item.book.price ?? 0) | currency:'LKR ' }}</div>
+        <div class="book-price">Price: {{ (item.book.promotionEnable
+          ? (item.book.promotionBookPrice ?? item.book.price ?? 0)
+          : (item.book.price ?? 0)) | currency:'LKR ' }}</div>
+        <div class="book-subtotal">Subtotal: {{
+          item.quantity *
+          (item.book.promotionEnable
+            ? (item.book.promotionBookPrice ?? item.book.price ?? 0)
+            : (item.book.price ?? 0))
+            | currency:'LKR '
+          }}</div>
       </div>
-      <button mat-icon-button style="background: coral;" color="warn" (click)="removeItem(i)"><mat-icon>delete</mat-icon></button>
+      <button mat-icon-button style="background: coral;" color="warn" (click)="removeItem(i)">
+        <mat-icon>delete</mat-icon>
+      </button>
     </div>
 
     <mat-divider></mat-divider>
 
-    <div class="checkout-total"><strong>Total:</strong> {{ totalPrice | currency:'LKR' }}</div>
+    <div class="checkout-total"><strong>Total:</strong> {{ totalPrice | currency:'LKR ' }}</div>
 
     <button mat-raised-button color="primary" (click)="placeOrder()" [disabled]="!canPlaceOrder" class="final-checkout-btn">
       Place Order
     </button>
+  </ng-container>
+
+  <!-- Bill Section -->
+  <ng-container *ngIf="billData" class="bill-box">
+    <div class="bill-frame">
+      <!-- Shop Logo and Welcome Message -->
+      <div class="bill-header">
+        <img src="/assets/pahana-edu-logo.jpg" alt="Shop Logo" class="shop-logo" />
+        <h2>Welcome to Pahana Bookstore!</h2>
+      </div>
+
+      <h2>Order Bill</h2>
+
+      <!-- Customer Info -->
+      <p><strong>Order ID:</strong> {{ billData.orderId }}</p>
+      <p><strong>Order Date:</strong> {{ billData.orderDate | date:'medium' }}</p>
+      <p><strong>Customer:</strong> {{ billData.customer?.customerName }}</p>
+      <p><strong>Customer Reg No:</strong> {{ billData.customer?.customerRegNo }}</p>
+      <p><strong>Email:</strong> {{ billData.customer?.email }}</p>
+      <p><strong>Phone:</strong> {{ billData.customer?.phoneNumber }}</p>
+      <p><strong>Payment Type:</strong> {{ billData.paymentType }}</p>
+
+      <!-- Items Table -->
+      <h3>Items</h3>
+      <table>
+        <tr>
+          <th>#</th>
+          <th>Book</th>
+          <th>Quantity</th>
+          <th>Price</th>
+        </tr>
+        <tr *ngFor="let item of billData.orderDetailDtos; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ item.book?.name }}</td>
+          <td>{{ item.itemQuantity }}</td>
+          <td>Rs. {{ item.discountPrice }}</td>
+        </tr>
+      </table>
+
+      <!-- Total Section -->
+      <h3>Total: Rs. {{ billData.discountAmount }}</h3>
+      <h4>Discount: Rs. {{ billData.paidAmount }}</h4>
+      <h4>Paid: Rs. {{ billData.totalAmount }}</h4>
+    </div>
+
+      <button mat-raised-button color="accent" (click)="downloadBill()">Download Bill</button>
   </ng-container>
 
   <ng-template #emptyCart>
