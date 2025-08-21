@@ -11,7 +11,7 @@ export class AuthService {
 
   sendGoogleCredential(credential: string, mobile: string): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(
-      `http://localhost:9090/pahana-edu/api/auth/google`,
+      `http://34.47.130.115:9090/pahana-edu/api/auth/google`,
       { credential, mobile }
     );
   }

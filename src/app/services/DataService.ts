@@ -13,7 +13,7 @@ import {CustomerOpenApiResponse} from './response/CustomerOpenApiResponse';
 })
 export class DataService {
 
-  private readonly baseUrl = 'http://localhost:9090/pahana-edu/open/api/customer';
+  private readonly baseUrl = 'http://34.47.130.115:9090/pahana-edu/open/api/customer';
 
   constructor(private http: HttpClient) {}
 

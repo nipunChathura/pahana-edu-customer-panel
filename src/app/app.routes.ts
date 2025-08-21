@@ -21,9 +21,19 @@ export const routes: Routes = [
   { path: 'about', component: AboutComponent },
   { path: 'help', component: HelpComponent },
   // { path: 'book/:name', component: BookListComponent },
-  { path: 'book/:type/:id', component: BookListComponent },
+  // { path: 'book/:type/:id', component: BookListComponent },
   { path: 'checkout', component: CheckoutComponent },
-  { path: '**', redirectTo: '/home' }
+  { path: '**', redirectTo: '/home' },
+  {
+    path: 'book/:type/:id',
+    loadComponent: () =>
+      import('./pages/book-list.component/book-list.component').then(
+        (m) => m.BookListComponent
+      ),
+    data: {
+      renderMode: 'client'
+    }
+  }
 ];
 
 @NgModule({
