@@ -25,7 +25,8 @@
               }
             ],
             "styles": [
-              "src/styles.css"
+              "src/custom-theme.scss",
+              "src/styles.scss"
             ],
             "server": "src/main.server.ts",
             "outputMode": "server",
@@ -67,6 +68,9 @@
               "buildTarget": "pahanaedu-customer-panel:build:development"
             }
           },
+          "options": {
+            "port": 4100
+          },
           "defaultConfiguration": "development"
         },
         "extract-i18n": {
@@ -87,11 +91,15 @@
               }
             ],
             "styles": [
-              "src/styles.css"
+              "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
+              "src/styles.scss"
             ]
           }
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "7ff694e1-4453-487e-bf55-2101f48fc109"
   }
 }

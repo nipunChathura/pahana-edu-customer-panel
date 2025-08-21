@@ -1,0 +1,152 @@
+<div class="checkout-container">
+
+  <h2>Checkout</h2>
+
+  <!-- Customer + Payment Details Row -->
+  <div class="details-row">
+
+    <!-- Customer Details -->
+    <div class="customer-details" [formGroup]="customerForm" *ngIf="showDetails">
+      <h3>Customer Details</h3>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Name</mat-label>
+        <input matInput placeholder="Enter your name" formControlName="name" />
+        <mat-error *ngIf="customerForm.get('name')?.hasError('required')">Name is required</mat-error>
+        <mat-error *ngIf="customerForm.get('name')?.hasError('minlength')">Name must be at least 2 characters</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" placeholder="Enter your email" formControlName="email" />
+        <mat-error *ngIf="customerForm.get('email')?.hasError('required')">Email is required</mat-error>
+        <mat-error *ngIf="customerForm.get('email')?.hasError('email')">Invalid email format</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Phone Number</mat-label>
+        <input matInput placeholder="07XXXXXXXX" formControlName="phone" />
+        <mat-error *ngIf="customerForm.get('phone')?.hasError('required')">Phone number is required</mat-error>
+        <mat-error *ngIf="customerForm.get('phone')?.hasError('pattern')">Invalid Sri Lankan mobile number</mat-error>
+      </mat-form-field>
+    </div>
+
+    <!-- Payment Details -->
+    <div class="payment-details" [formGroup]="paymentForm" *ngIf="showDetails">
+      <h3>Payment Details</h3>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Cardholder Name</mat-label>
+        <input matInput placeholder="Name on Card" formControlName="cardHolder" />
+        <mat-error *ngIf="paymentForm.get('cardHolder')?.hasError('required')">Cardholder name is required</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Card Number</mat-label>
+        <input matInput placeholder="1234567812345678" maxlength="16" formControlName="cardNumber" />
+        <mat-error *ngIf="paymentForm.get('cardNumber')?.hasError('required')">Card number is required</mat-error>
+        <mat-error *ngIf="paymentForm.get('cardNumber')?.hasError('pattern')">Invalid card number</mat-error>
+      </mat-form-field>
+
+      <div class="row">
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Expiry (MM/YY)</mat-label>
+          <input matInput placeholder="MM/YY" formControlName="expiry" />
+          <mat-error *ngIf="paymentForm.get('expiry')?.hasError('required')">Expiry date is required</mat-error>
+          <mat-error *ngIf="paymentForm.get('expiry')?.hasError('pattern')">Invalid expiry date</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>CVV</mat-label>
+          <input matInput type="password" maxlength="4" placeholder="CVV" formControlName="cvv" />
+          <mat-error *ngIf="paymentForm.get('cvv')?.hasError('required')">CVV is required</mat-error>
+          <mat-error *ngIf="paymentForm.get('cvv')?.hasError('pattern')">Invalid CVV</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cart Items -->
+  <ng-container *ngIf="cartItems.length > 0; else emptyCart" >
+    <h3>Your Cart</h3>
+    <div *ngFor="let item of cartItems; let i = index" class="checkout-item">
+      <img [src]="item.book.imageUrl" alt="{{ item.book.name }}" class="checkout-img" />
+      <div class="checkout-info">
+        <div class="book-name">{{ item.book.name }}</div>
+        <div class="book-qty">Qty: {{ item.quantity }}</div>
+        <div class="book-price">Price: {{ (item.book.promotionEnable
+          ? (item.book.promotionBookPrice ?? item.book.price ?? 0)
+          : (item.book.price ?? 0)) | currency:'LKR ' }}</div>
+        <div class="book-subtotal">Subtotal: {{
+          item.quantity *
+          (item.book.promotionEnable
+            ? (item.book.promotionBookPrice ?? item.book.price ?? 0)
+            : (item.book.price ?? 0))
+            | currency:'LKR '
+          }}</div>
+      </div>
+      <button mat-icon-button style="background: coral;" color="warn" (click)="removeItem(i)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="checkout-total"><strong>Total:</strong> {{ totalPrice | currency:'LKR ' }}</div>
+
+    <button mat-raised-button color="primary" (click)="placeOrder()" [disabled]="!canPlaceOrder" class="final-checkout-btn">
+      Place Order
+    </button>
+  </ng-container>
+
+  <!-- Bill Section -->
+  <ng-container *ngIf="billData" class="bill-box">
+    <div class="bill-frame">
+      <!-- Shop Logo and Welcome Message -->
+      <div class="bill-header">
+        <img src="/assets/pahana-edu-logo.jpg" alt="Shop Logo" class="shop-logo" />
+        <h2>Welcome to Pahana Bookstore!</h2>
+      </div>
+
+      <h2>Order Bill</h2>
+
+      <!-- Customer Info -->
+      <p><strong>Order ID:</strong> {{ billData.orderId }}</p>
+      <p><strong>Order Date:</strong> {{ billData.orderDate | date:'medium' }}</p>
+      <p><strong>Customer:</strong> {{ billData.customer?.customerName }}</p>
+      <p><strong>Customer Reg No:</strong> {{ billData.customer?.customerRegNo }}</p>
+      <p><strong>Email:</strong> {{ billData.customer?.email }}</p>
+      <p><strong>Phone:</strong> {{ billData.customer?.phoneNumber }}</p>
+      <p><strong>Payment Type:</strong> {{ billData.paymentType }}</p>
+
+      <!-- Items Table -->
+      <h3>Items</h3>
+      <table>
+        <tr>
+          <th>#</th>
+          <th>Book</th>
+          <th>Quantity</th>
+          <th>Price</th>
+        </tr>
+        <tr *ngFor="let item of billData.orderDetailDtos; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ item.book?.name }}</td>
+          <td>{{ item.itemQuantity }}</td>
+          <td>Rs. {{ item.discountPrice }}</td>
+        </tr>
+      </table>
+
+      <!-- Total Section -->
+      <h3>Total: Rs. {{ billData.discountAmount }}</h3>
+      <h4>Discount: Rs. {{ billData.paidAmount }}</h4>
+      <h4>Paid: Rs. {{ billData.totalAmount }}</h4>
+    </div>
+
+      <button mat-raised-button color="accent" (click)="downloadBill()">Download Bill</button>
+  </ng-container>
+
+  <ng-template #emptyCart>
+    <div class="empty-cart">🛒 Your cart is empty.</div>
+  </ng-template>
+
+</div>

@@ -1,0 +1,9 @@
+<div class="scroll-wrapper">
+  <button class="arrow left" (click)="prev()" *ngIf="showArrows">‹</button>
+  <div #viewport class="scroll-viewport">
+    <div class="scroll-track">
+      <ng-content></ng-content>
+    </div>
+  </div>
+  <button class="arrow right" (click)="next()" *ngIf="showArrows">›</button>
+</div>
