@@ -85,6 +85,8 @@ import { environment } from '../../../environments/environment';
 import { CustomerDto } from '../../services/dto/CustomerDto';
 import {MatIconButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
+import {MatDialog} from '@angular/material/dialog';
+import {MobileDialogComponent} from './mobile-dialog.component';
 
 declare const google: any;
 
@@ -98,7 +100,7 @@ declare const google: any;
 export class HeaderComponent implements AfterViewInit, OnInit {
   user: CustomerDto | null = null;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router, private dialog: MatDialog) {}
 
   ngOnInit() {
     if (typeof window !== 'undefined') {
@@ -130,45 +132,80 @@ export class HeaderComponent implements AfterViewInit, OnInit {
     }
   }
 
+  // handleCredentialResponse(response: any) {
+  //   const credential = response.credential;
+  //   window.onload = function() {
+  //     const mobile = prompt("Enter your mobile number:");
+  //     console.log("You entered:", mobile);
+  //   };
+  //   const mobile = prompt("Enter your mobile number:");
+  //   console.log("You entered:", mobile);
+  //   if (!mobile) {
+  //     alert("Mobile number is required!");
+  //     return;
+  //   }
+  //
+  //   this.authService.sendGoogleCredential(credential, mobile).subscribe({
+  //     next: (res) => {
+  //       console.log(res);
+  //       if (res.status === 'success') {
+  //         this.user = res.customerDto;
+  //
+  //         if (typeof window !== 'undefined') {
+  //           localStorage.setItem('email', res.customerDto.email);
+  //           localStorage.setItem('name', res.customerDto.customerName);
+  //           localStorage.setItem('profile', res.customerDto.picture);
+  //           localStorage.setItem('customerId', String(res.customerDto.customerId));
+  //         }
+  //
+  //         window.location.reload();
+  //         this.router.navigate(['/home']).then(() => {
+  //           console.log('Navigation success!');
+  //         }).catch(err => {
+  //           console.error('Navigation error:', err);
+  //         });
+  //       } else {
+  //         console.error('Save error:', res.responseMessage);
+  //       }
+  //     },
+  //     error: (err) => {
+  //       console.error('Save error:', err);
+  //     }
+  //   });
+  // }
+
   handleCredentialResponse(response: any) {
     const credential = response.credential;
-    window.onload = function() {
-      const mobile = prompt("Enter your mobile number:");
-      console.log("You entered:", mobile);
-    };
-    const mobile = prompt("Enter your mobile number:");
-    console.log("You entered:", mobile);
-    if (!mobile) {
-      alert("Mobile number is required!");
-      return;
-    }
 
-    this.authService.sendGoogleCredential(credential, mobile).subscribe({
-      next: (res) => {
-        console.log(res);
-        if (res.status === 'success') {
-          this.user = res.customerDto;
+    const dialogRef = this.dialog.open(MobileDialogComponent, {
+      width: '400px',
+      height: '250px',
+      disableClose: true
+    });
 
-          if (typeof window !== 'undefined') {
+    dialogRef.afterClosed().subscribe((mobile: string | null) => {
+      if (!mobile) {
+        alert('Mobile number is required!');
+        return;
+      }
+
+      this.authService.sendGoogleCredential(credential, mobile).subscribe({
+        next: (res) => {
+          if (res.status === 'success') {
+            this.user = res.customerDto;
+
             localStorage.setItem('email', res.customerDto.email);
             localStorage.setItem('name', res.customerDto.customerName);
             localStorage.setItem('profile', res.customerDto.picture);
             localStorage.setItem('customerId', String(res.customerDto.customerId));
+            window.location.reload();
+            this.router.navigate(['/home']);
+          } else {
+            console.error('Save error:', res.responseMessage);
           }
-
-          window.location.reload();
-          this.router.navigate(['/home']).then(() => {
-            console.log('Navigation success!');
-          }).catch(err => {
-            console.error('Navigation error:', err);
-          });
-        } else {
-          console.error('Save error:', res.responseMessage);
-        }
-      },
-      error: (err) => {
-        console.error('Save error:', err);
-      }
+        },
+        error: (err) => console.error('Save error:', err)
+      });
     });
   }
 
