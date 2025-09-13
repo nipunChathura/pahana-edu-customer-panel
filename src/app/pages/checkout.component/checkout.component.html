@@ -92,7 +92,7 @@
 
     <mat-divider></mat-divider>
 
-    <div class="checkout-total"><strong>Total:</strong> {{ totalPrice | currency:'LKR ' }}</div>
+    <div class="checkout-total"><strong>Total:</strong> {{ paidPrice | currency:'LKR ' }}</div>
 
     <button mat-raised-button color="primary" (click)="placeOrder()" [disabled]="!canPlaceOrder" class="final-checkout-btn">
       Place Order
@@ -137,9 +137,9 @@
       </table>
 
       <!-- Total Section -->
-      <h3>Total: Rs. {{ billData.discountAmount }}</h3>
-      <h4>Discount: Rs. {{ billData.paidAmount }}</h4>
-      <h4>Paid: Rs. {{ billData.totalAmount }}</h4>
+      <h3>Total: Rs. {{ billData.totalAmount }}</h3>
+      <h4>Discount: Rs. {{ billData.discountAmount }}</h4>
+      <h4>Paid: Rs. {{ billData.paidAmount }}</h4>
     </div>
 
       <button mat-raised-button color="accent" (click)="downloadBill()">Download Bill</button>

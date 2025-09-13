@@ -283,6 +283,7 @@ import { OrderDetailsDto } from '../../services/dto/OrderDetailsDto';
 import { PlaceOrderRequest } from '../../services/request/PlaceOrderRequest';
 import { Router } from '@angular/router';
 import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 @Component({
   selector: 'app-checkout',
@@ -302,9 +303,9 @@ import jsPDF from 'jspdf';
 export class CheckoutComponent implements OnInit {
 
   cartItems: { book: BookDto; quantity: number }[] = [];
-  totalPrice = 0;
-  discountAmount = 0;
-  paidAmount = 0;
+  paidPrice = 0;
+  totalAmount = 0;
+  discountPrice = 0;
   showDetails: boolean = true;
 
 
@@ -362,14 +363,17 @@ export class CheckoutComponent implements OnInit {
 
   loadCart() {
     this.cartItems = this.cartService.getCartItems();
-    this.totalPrice = this.cartService.getTotalPrice();
-    this.discountAmount = this.cartItems.reduce((sum, item) => {
+    this.paidPrice = this.cartService.getTotalPrice();
+    this.totalAmount = this.cartItems.reduce((sum, item) => {
       const discount = item.book.promotionEnable
         ? ((item.book.price ?? 0) - (item.book.promotionPrice ?? item.book.price ?? 0)) * item.quantity
-        : 0;
+        : (item.book.price ?? 0);
       return sum + discount;
     }, 0);
-    this.paidAmount = this.totalPrice - this.discountAmount;
+    this.discountPrice = this.totalAmount - this.paidPrice ;
+    console.log('discountPrice '+ this.discountPrice);
+    console.log('paidPrice '+ this.paidPrice);
+    console.log('totalAmount '+ this.totalAmount);
   }
 
   removeItem(index: number) {
@@ -398,9 +402,9 @@ export class CheckoutComponent implements OnInit {
       customerId: null,
       customer: null,
       orderDate: null,
-      totalAmount: this.totalPrice,
-      discountAmount: this.discountAmount,
-      paidAmount: this.paidAmount,
+      totalAmount: this.totalAmount,
+      discountAmount: this.discountPrice,
+      paidAmount: this.paidPrice,
       paymentType: 'CARD',
       orderDetailDtos: orderDetails,
     };
@@ -469,6 +473,9 @@ export class CheckoutComponent implements OnInit {
         if (response.status === 'success') {
           this.billData = response.orderDto;
           alert('Order placed successfully! Bill is ready.');
+          console.log('this.billData.totalAmount ' + this.billData.totalAmount)
+          console.log('this.billData.paidAmount ' + this.billData.paidAmount)
+          console.log('this.billData.discountAmount ' + this.billData.discountAmount)
           this.showDetails = false;
           this.cartService.clearCart();
           this.cartItems = [];
@@ -490,36 +497,158 @@ export class CheckoutComponent implements OnInit {
     return this.customerForm.valid && this.paymentForm.valid && this.cartItems.length > 0;
   }
 
-  downloadBill() {
+  // downloadBill() {
+  //   if (!this.billData) return;
+  //
+  //   const doc = new jsPDF();
+  //   doc.setFontSize(16);
+  //   doc.text("Invoice / Bill", 105, 20, { align: "center" });
+  //
+  //   doc.setFontSize(12);
+  //   const customer = this.billData.customer;
+  //   doc.text(`Order ID: ${this.billData.orderId}`, 20, 40);
+  //   doc.text(`Customer: ${customer?.customerName}`, 20, 50);
+  //   doc.text(`Customer Reg No: ${customer?.customerRegNo}`, 20, 60);
+  //   doc.text(`Email: ${customer?.email}`, 20, 70);
+  //   doc.text(`Phone: ${customer?.phoneNumber}`, 20, 80);
+  //   doc.text(`Payment Type: ${this.billData.paymentType}`, 20, 90);
+  //
+  //   let y = 110;
+  //   doc.text("Items:", 20, y);
+  //   y += 10;
+  //   this.billData.orderDetailDtos.forEach((item, index) => {
+  //     const line = `${index + 1}. ${item.book?.name} x ${item.itemQuantity} = Rs.${item.discountPrice}`;
+  //     doc.text(line, 25, y);
+  //     y += 10;
+  //   });
+  //
+  //   y += 10;
+  //   doc.text(`Total Amount: Rs.${this.billData.totalAmount}`, 20, y);
+  //   doc.text(`Discount: Rs.${this.billData.discountAmount}`, 20, y + 10);
+  //   doc.text(`Paid: Rs.${this.billData.paidAmount}`, 20, y + 20);
+  //
+  //   doc.save(`Bill_Order_${this.billData.orderId}.pdf`);
+  // }
+
+  async downloadBill() {
     if (!this.billData) return;
 
     const doc = new jsPDF();
-    doc.setFontSize(16);
-    doc.text("Invoice / Bill", 105, 20, { align: "center" });
 
-    doc.setFontSize(12);
+    const logoBase64 = await this.getBase64ImageFromURL('/assets/pahana-edu-logo.jpg');
+    const logoWidth = 30;
+    const logoHeight = 30;
+    doc.addImage(logoBase64, 'PNG', 15, 15, logoWidth, logoHeight);
+
+    // === Page Border ===
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    doc.setLineWidth(0.8);
+    doc.rect(10, 10, pageWidth - 20, pageHeight - 20);
+
+    // === Shop Header ===
+    doc.setFontSize(18);
+    doc.setFont("helvetica", "bold");
+    doc.text("Pahana Edu Bookshop", pageWidth / 2, 25, {align: "center"});
+
+    doc.setFontSize(11);
+    doc.setFont("helvetica", "normal");
+    doc.text("123 Main Street, Colombo, Sri Lanka", pageWidth / 2, 32, {align: "center"});
+    doc.text("Tel: +94 77 123 4567 | Email: info@pahanaedu.lk", pageWidth / 2, 38, {align: "center"});
+
+    // === Invoice Title ===
+    doc.setFontSize(14);
+    doc.setFont("helvetica", "bold");
+    doc.text("INVOICE / BILL", pageWidth / 2, 50, {align: "center"});
+
+    // === Customer & Order Info ===
     const customer = this.billData.customer;
-    doc.text(`Order ID: ${this.billData.orderId}`, 20, 40);
-    doc.text(`Customer: ${customer?.customerName}`, 20, 50);
-    doc.text(`Email: ${customer?.email}`, 20, 60);
-    doc.text(`Phone: ${customer?.phoneNumber}`, 20, 70);
-    doc.text(`Payment Type: ${this.billData.paymentType}`, 20, 80);
+    doc.setFontSize(11);
+    doc.setFont("helvetica", "normal");
 
-    let y = 100;
-    doc.text("Items:", 20, y);
-    y += 10;
+    doc.text(`Order ID: ${this.billData.orderId}`, 20, 65);
+    doc.text(`Customer: ${customer?.customerName}`, 20, 72);
+    doc.text(`Customer Reg No: ${customer?.customerRegNo}`, 20, 79);
+    doc.text(`Email: ${customer?.email}`, 20, 86);
+    doc.text(`Phone: ${customer?.phoneNumber}`, 20, 93);
 
-    this.billData.orderDetailDtos.forEach((item, index) => {
-      const line = `${index + 1}. ${item.book?.name} x ${item.itemQuantity} = Rs.${item.discountPrice}`;
-      doc.text(line, 25, y);
-      y += 10;
+    doc.text(`Payment Type: ${this.billData.paymentType}`, pageWidth - 80, 65);
+
+    // === Table Data ===
+    const tableData = this.billData.orderDetailDtos.map((item, index) => {
+      const qty = item.itemQuantity ?? 0;
+      const itemPrice = item.itemPrice ?? 0;
+      const discount = item.discountPrice ?? 0;
+
+      // Subtotal (Qty × Item Price – Discount)
+      const subtotal = (qty * itemPrice) - discount;
+
+      return [
+        index + 1,
+        item.book?.name || "",
+        qty,
+        `Rs. ${itemPrice.toFixed(2)}`,
+        `Rs. ${discount.toFixed(2)}`,
+        `Rs. ${subtotal.toFixed(2)}`
+      ];
     });
 
-    y += 10;
-    doc.text(`Total Amount: Rs.${this.billData.totalAmount}`, 20, y);
-    doc.text(`Discount: Rs.${this.billData.discountAmount}`, 20, y + 10);
-    doc.text(`Paid: Rs.${this.billData.paidAmount}`, 20, y + 20);
+    autoTable(doc, {
+      startY: 105,
+      head: [["#", "Book", "Qty", "Item Price", "Discount", "Subtotal"]],
+      body: tableData,
+      theme: "grid",
+      styles: {fontSize: 11, cellPadding: 4},
+      headStyles: {fillColor: [41, 128, 185], textColor: 255, halign: "center"},
+      columnStyles: {
+        0: {halign: "center", cellWidth: 10},
+        1: {cellWidth: 50},
+        2: {halign: "center", cellWidth: 15},
+        3: {halign: "right", cellWidth: 30},
+        4: {halign: "right", cellWidth: 30},
+        5: {halign: "right", cellWidth: 35}
+      },
+      margin: {left: 15, right: 15}
+    });
+
+    // === Summary Section (Box Style) ===
+    let finalY = (doc as any).lastAutoTable.finalY || 120;
+    // doc.setFontSize(12);
+    // doc.setFont("helvetica", "bold");
+
+    // doc.rect(pageWidth - 80, finalY + 10, 60, 30); // summary box border
+    // doc.text("Summary", pageWidth - 50, finalY + 18, { align: "center" });
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(11);
+    doc.text(`Total: Rs.${this.billData.totalAmount} /=`, pageWidth - 75, finalY + 28);
+    doc.text(`Discount: Rs.${this.billData.discountAmount} /=`, pageWidth - 75, finalY + 36);
+    doc.text(`Paid: Rs.${this.billData.paidAmount} /=`, pageWidth - 75, finalY + 44);
+
+    // === Footer ===
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "italic");
+    doc.text("Thank you for shopping with us!", pageWidth / 2, pageHeight - 15, {align: "center"});
 
     doc.save(`Bill_Order_${this.billData.orderId}.pdf`);
   }
+
+  getBase64ImageFromURL(url: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.setAttribute('crossOrigin', 'anonymous'); // to avoid CORS issues
+      img.src = url;
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+        ctx?.drawImage(img, 0, 0);
+        const dataURL = canvas.toDataURL('image/png');
+        resolve(dataURL);
+      };
+      img.onerror = error => reject(error);
+    });
+  }
+
 }
